@@ -1,0 +1,28 @@
+#include <iostream>
+#include <thread>
+#include "sharedmemory.h"
+
+int main()
+{
+    SharedMemory sm;
+    sm.Create(L"wd", 4096);
+    // server->Write
+    int count  = 0;
+    char szBuf[1024] = {0};
+    while (true)
+    {
+        sprintf_s(szBuf, "This is a try string, count: %d", count++);
+        sm.Write(szBuf, strlen(szBuf));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1024));
+    }
+    /*
+    // client->Read
+    char szBuf[1024] = {0};
+    while (true)
+    {
+        sm.Read(szBuf, 1024);
+        std::cout << (char*)szBuf << std::endl;
+    }
+    */
+    return 0;
+}
